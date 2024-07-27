@@ -16,10 +16,12 @@ require (
 	github.com/knadh/stuffbin v1.1.0
 	github.com/labstack/echo/v4 v4.11.2
 	github.com/lib/pq v1.10.9
+	github.com/soumendrak/odiphone v0.0.0-20240319170717-ebe546957aaa
 	github.com/spf13/pflag v1.0.5
 	gitlab.com/joice/mlphone-go v0.0.0-20201001084309-2bb02984eed8
 	golang.org/x/mod v0.8.0
 	gopkg.in/volatiletech/null.v6 v6.0.0-20170828023728-0bef4e07ae1b
+	gotest.tools/v3 v3.5.1
 )
 
 require (
@@ -48,7 +50,6 @@ require (
 	golang.org/x/sys v0.13.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
-	gotest.tools/v3 v3.5.1 // indirect
 )
 
 replace github.com/imdario/mergo => github.com/imdario/mergo v0.3.8

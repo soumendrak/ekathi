@@ -9,6 +9,7 @@ import (
 	"github.com/knadh/dictpress/internal/data"
 	"github.com/knadh/knphone"
 	"gitlab.com/joice/mlphone-go"
+	"github.com/soumendrak/odiphone" 
 )
 
 // IndicPhone is a phonetic tokenizer that generates phonetic tokens for
@@ -16,6 +17,7 @@ import (
 type IndicPhone struct {
 	kn *knphone.KNphone
 	ml *mlphone.MLPhone
+	od *odiphone.ODIphone
 }
 
 // New returns a new instance of the Kannada tokenizer.
@@ -23,13 +25,14 @@ func New() *IndicPhone {
 	return &IndicPhone{
 		kn: knphone.New(),
 		ml: mlphone.New(),
+		od: odiphone.New(),
 	}
 }
 
 // ToTokens tokenizes a string and a language returns an array of tsvector tokens.
 // eg: [KRM0 KRM] or [KRM:2 KRM:1] with weights.
 func (ip *IndicPhone) ToTokens(s string, lang string) ([]string, error) {
-	if lang != "kannada" && lang != "malayalam" {
+	if lang != "kannada" && lang != "malayalam"  && lang != "odia" {
 		return nil, errors.New("unknown language to tokenize")
 	}
 
@@ -45,6 +48,8 @@ func (ip *IndicPhone) ToTokens(s string, lang string) ([]string, error) {
 			key0, key1, key2 = ip.kn.Encode(c)
 		case "malayalam":
 			key0, key1, key2 = ip.ml.Encode(c)
+		case "odia":
+			key0, key1, key2 = ip.od.Encode(c)
 		}
 
 		if key0 == "" {
@@ -70,6 +75,8 @@ func (ip *IndicPhone) ToQuery(s string, lang string) (string, error) {
 		key0, key1, key2 = ip.kn.Encode(s)
 	case "malayalam":
 		key0, key1, key2 = ip.ml.Encode(s)
+	case "odia":
+		key0, key1, key2 = ip.od.Encode(s)
 	}
 
 	if key0 == "" {
