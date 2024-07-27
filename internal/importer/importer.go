@@ -82,6 +82,25 @@ func (im *Importer) Import(filePath string) error {
 	if err != nil {
 		return fmt.Errorf("error opening file %s: %v", filePath, err)
 	}
+	defer fp.Close()
+
+    // Read the first three bytes of the file
+    var bom [3]byte
+    _, err = fp.Read(bom[:])
+    if err != nil {
+        return fmt.Errorf("error reading file %s: %v", filePath, err)
+    }
+
+    // If the first three bytes are the UTF-8 BOM, skip them
+    if bom[0] == 0xEF && bom[1] == 0xBB && bom[2] == 0xBF {
+        // BOM detected, continue reading from after the BOM
+    } else {
+        // If the first three bytes are not the UTF-8 BOM, reset the file pointer to the beginning of the file
+        _, err = fp.Seek(0, io.SeekStart)
+        if err != nil {
+            return fmt.Errorf("error seeking in file %s: %v", filePath, err)
+        }
+    }
 
 	var (
 		// Holds all main entries.
@@ -104,6 +123,7 @@ func (im *Importer) Import(filePath string) error {
 		}
 
 		if n == 0 && row[0] != "-" {
+			fmt.Println(row, row[0])
 			return fmt.Errorf("line %d: first row in the file should be of type '-'", n)
 		}
 		n++
